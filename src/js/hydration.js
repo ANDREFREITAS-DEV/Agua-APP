@@ -1,59 +1,80 @@
 import { Storage } from './storage.js';
+import { ENTRY_TYPES } from './constants.js';
 
-export class HydrationLogic {
-    constructor() {
-        this.data = Storage.getData();
-        this.settings = Storage.getSettings();
-        this.checkDayReset();
-    }
+/**
+ * Módulo de Lógica de Hidratação (Business Logic Layer)
+ * Responsável por cálculos, validações e orquestração entre UI e Dados.
+ */
+export const Hydration = {
+    
+    /**
+     * Adiciona um novo registro ao histórico
+     * @param {string} typeId - Chave do tipo (ex: 'water', 'coffee', 'medicine')
+     * @param {number} amount - Quantidade (ml ou unidades)
+     * @param {string|null} customLabel - Nome personalizado (obrigatório p/ remédios)
+     */
+    addRecord: (typeId, amount, customLabel = null) => {
+        const typeConfig = ENTRY_TYPES[typeId];
 
-    checkDayReset() {
-        const today = new Date().toLocaleDateString('pt-BR');
-        
-        if (this.data.currentDate !== today) {
-            // Salvar dia anterior no histórico se houve consumo
-            if (this.data.consumed > 0) {
-                this.data.history.unshift({
-                    date: this.data.currentDate,
-                    amount: this.data.consumed,
-                    goal: this.settings.goal
-                });
-                
-                // Limitar histórico a 7 dias
-                if (this.data.history.length > 7) {
-                    this.data.history.pop();
-                }
-            }
-
-            // Resetar para hoje
-            this.data.currentDate = today;
-            this.data.consumed = 0;
-            this.save();
+        if (!typeConfig) {
+            console.error(`Tipo desconhecido: ${typeId}`);
+            return false;
         }
-    }
 
-    addWater(amount) {
-        this.data.consumed += parseInt(amount);
-        this.save();
-        return this.data.consumed;
-    }
+        // 1. Cálculo da Hidratação Real (Regra de Negócio)
+        // Se for remédio (factor 0), hydrationML será 0.
+        // Math.floor garante números inteiros no banco.
+        const hydrationML = Math.floor(amount * typeConfig.factor);
 
-    updateGoal(newGoal) {
-        this.settings.goal = parseInt(newGoal);
-        Storage.saveSettings(this.settings);
-    }
+        // 2. Definição do Nome
+        // Se o usuário digitou um nome (ex: "Dipirona"), usamos ele.
+        // Se não, usamos o padrão do catálogo (ex: "Água").
+        const label = customLabel || typeConfig.label;
 
-    getProgress() {
-        const percent = Math.min(100, Math.round((this.data.consumed / this.settings.goal) * 100));
+        // 3. Montagem do Objeto (Payload)
+        const entryData = {
+            type: typeId,
+            label: label,
+            amount: amount,
+            unit: typeConfig.unit, // Persistimos a unidade ('ml' ou 'un') para facilitar a UI
+            hydrationML: hydrationML
+        };
+
+        // 4. Persistência
+        Storage.addEntry(entryData);
+        return true;
+    },
+
+    /**
+     * Remove um registro pelo ID
+     */
+    removeRecord: (id) => {
+        Storage.deleteEntry(id);
+    },
+
+    /**
+     * Retorna o "Estado Atual" do dia para a UI consumir.
+     * Calcula totais e progresso em tempo real baseados no histórico.
+     */
+    getDailyStats: () => {
+        const data = Storage.getData();
+        const settings = Storage.getSettings();
+
+        // Reduce: Soma apenas a coluna 'hydrationML' de todos os registros
+        const currentTotal = data.entries.reduce((total, entry) => {
+            return total + (entry.hydrationML || 0);
+        }, 0);
+
+        // Cálculo de Porcentagem (Trava em 100% visualmente se quiser, ou deixa passar)
+        // Aqui deixamos passar de 100% para gamificação ("Superou a meta!")
+        const progressPercentage = (currentTotal / settings.goal) * 100;
+
         return {
-            consumed: this.data.consumed,
-            goal: this.settings.goal,
-            percent: percent,
-            history: this.data.history
+            totalML: currentTotal,
+            goalML: settings.goal,
+            percentage: progressPercentage, // Número puro (ex: 50.5)
+            entries: data.entries,          // Histórico bruto para a Timeline
+            isGoalReached: currentTotal >= settings.goal
         };
     }
-
-    save() {
-        Storage.saveData(this.data);
-    }
-}
+};

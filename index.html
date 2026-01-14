@@ -2,13 +2,12 @@
 <html lang="pt-BR" data-theme="light">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="description" content="AquaHabit - Crie o hábito de beber água diariamente.">
     <meta name="theme-color" content="#3B82F6">
     <title>AquaHabit</title>
 
     <link rel="manifest" href="./manifest.json">
-    <link rel="apple-touch-icon" href="./assets/icons/android-launchericon-192-192.png">
     <link rel="icon" type="image/png" href="./assets/icons/android-launchericon-48-48.png">
 
     <link rel="stylesheet" href="./src/css/tokens.css">
@@ -20,62 +19,75 @@
 
     <header class="app-header">
         <div class="logo-area">
-            <img src="./assets/icons/android-launchericon-512-512.png" alt="Logo AquaHabit" class="logo-img">
+            <img src="./assets/icons/android-launchericon-512-512.png" alt="Logo" class="logo-img">
             <h1>AquaHabit</h1>
         </div>
         <div class="header-controls">
-            <button id="btn-install" class="install-btn" style="display: none;">
-                📲 Instalar
-            </button>
-
-            <button id="btn-theme" class="icon-btn" aria-label="Alternar Tema">
-                <span class="theme-icon">🌓</span>
-            </button>
-            <button id="btn-menu" class="icon-btn" aria-label="Menu e Configurações">
-                <span class="menu-icon">⚙️</span>
-            </button>
-        </div>
+            <button id="btn-install" class="install-btn" style="display: none;">📲 Instalar</button>
+            <button id="btn-theme" class="icon-btn">🌓</button>
+            <button id="btn-settings" class="icon-btn">⚙️</button> </div>
     </header>
 
-    <main class="container">
-        
-        <section class="progress-card">
-            <div class="progress-info">
-                <span id="display-consumed">0</span>
-                <span class="unit">ml</span>
+    <main class="app-container"> <section class="progress-section">
+            <div class="progress-container">
+                <svg class="progress-ring" width="220" height="220">
+                    <circle class="progress-ring-bg" stroke="var(--surface-variant)" stroke-width="12" fill="transparent" r="90" cx="110" cy="110"/>
+                    <circle class="progress-ring-circle" stroke="var(--primary-color)" stroke-width="12" fill="transparent" r="90" cx="110" cy="110"/>
+                </svg>
+                <div class="progress-text">
+                    <span class="label">Hoje</span>
+                    <h2 id="total-amount">0</h2>
+                    <span class="unit">ml</span>
+                </div>
             </div>
-            <div class="progress-meta">
-                Meta: <span id="display-goal">2000</span> ml
-            </div>
-            
-            <div class="progress-bar-container">
-                <div id="progress-fill" class="progress-fill" style="width: 0%"></div>
-            </div>
-            <p id="percentage-text" class="percentage-text">0%</p>
         </section>
 
-        <section class="actions-grid">
-            <button class="add-btn" data-amount="200">
-                <span>+ 200ml</span>
-                <small>Copo P</small>
-            </button>
-            <button class="add-btn" data-amount="300">
-                <span>+ 300ml</span>
-                <small>Copo M</small>
-            </button>
-            <button class="add-btn" data-amount="500">
-                <span>+ 500ml</span>
-                <small>Garrafa</small>
-            </button>
-        </section>
+        <section class="timeline-section">
+            <div class="section-header">
+                <h3>Histórico</h3>
+                <span class="date-badge" id="current-date">Hoje</span>
+            </div>
 
-        <section class="history-section">
-            <h2>Histórico Recente</h2>
+            <div id="empty-state" class="empty-state hidden">
+                <span class="empty-icon">💧</span>
+                <p>Comece seu dia bebendo água!</p>
+            </div>
+
             <ul id="history-list" class="history-list">
                 </ul>
         </section>
-        
-        </main>
+
+    </main>
+
+    <button id="fab-add" class="fab" aria-label="Adicionar Bebida">+</button>
+
+    <div id="add-modal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>O que você bebeu?</h3>
+                <button id="modal-close" class="close-btn">&times;</button>
+            </div>
+
+            <div id="drink-options-grid" class="options-grid">
+                </div>
+
+            <div class="modal-form">
+                <div id="label-container" class="input-group hidden">
+                    <label>Nome do item:</label>
+                    <input type="text" id="input-label" placeholder="Ex: Vitamina C">
+                </div>
+
+                <div class="input-group">
+                    <label>Quantidade:</label>
+                    <div class="amount-wrapper">
+                        <input type="number" id="input-amount" value="200" inputmode="numeric">
+                        <span id="unit-suffix">ml</span>
+                    </div>
+                </div>
+                <button id="btn-confirm-add" class="btn-primary">Confirmar</button>
+            </div>
+        </div>
+    </div>
 
     <dialog id="settings-modal" class="modal">
         <div class="modal-header">
@@ -86,7 +98,6 @@
         <div class="modal-content scrollable">
             <section class="settings-section">
                 <h4>Preferências</h4>
-                
                 <div class="input-group">
                     <label for="input-goal">Meta Diária (ml)</label>
                     <div class="input-row">
@@ -94,7 +105,6 @@
                         <button id="btn-save-goal" class="primary-btn sm">Salvar</button>
                     </div>
                 </div>
-
                 <div class="input-group row-between">
                     <label for="toggle-notify">Lembretes</label>
                     <label class="switch">
@@ -103,59 +113,23 @@
                     </label>
                 </div>
             </section>
-
             <hr class="divider">
-
             <section class="settings-section">
                 <h4>Sobre o Projeto</h4>
-                <p class="app-version">AquaHabit v1.0 (Beta)</p>
-                <p class="app-desc">
-                    Aplicativo focado em hidratação e privacidade. 
-                    Seus dados nunca saem do seu dispositivo.
-                </p>
-                <div class="dev-info">
-                    <small>Desenvolvido por</small>
-                    <strong>Andre Freitas</strong>
-                </div>
+                <p class="app-version">AquaHabit v2.0</p>
+                <div class="dev-info"><small>Desenvolvido por</small> <strong>Andre</strong></div>
             </section>
-
-            <hr class="divider">
-
             <section class="settings-section actions-section">
                 <button id="btn-share" class="action-card">
-                    <span class="icon">📤</span>
-                    <div class="text">
-                        <strong>Compartilhar</strong>
-                        <small>Envie para amigos</small>
-                    </div>
+                    <span class="icon">📤</span> <strong>Compartilhar</strong>
                 </button>
-                
                 <button id="btn-support" class="action-card">
-                    <span class="icon">☕</span>
-                    <div class="text">
-                        <strong>Apoiar o Dev</strong>
-                        <small>Pague um café</small>
-                    </div>
+                    <span class="icon">☕</span> <strong>Apoiar</strong>
                 </button>
             </section>
-            
-            <div class="footer-note">
-                <small>Feito com 💙 e JavaScript Puro</small>
-            </div>
         </div>
     </dialog>
 
     <script type="module" src="./src/js/main.js"></script>
-    
-    <script>
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./sw.js')
-                    .then(reg => console.log('SW Registrado!', reg.scope))
-                    .catch(err => console.error('Falha no SW:', err));
-            });
-        }
-    </script>
 </body>
-
 </html>
