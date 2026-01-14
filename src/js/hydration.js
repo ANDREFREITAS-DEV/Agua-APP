@@ -1,80 +1,89 @@
 import { Storage } from './storage.js';
 import { ENTRY_TYPES } from './constants.js';
 
-/**
- * Módulo de Lógica de Hidratação (Business Logic Layer)
- * Responsável por cálculos, validações e orquestração entre UI e Dados.
- */
 export const Hydration = {
     
-    /**
-     * Adiciona um novo registro ao histórico
-     * @param {string} typeId - Chave do tipo (ex: 'water', 'coffee', 'medicine')
-     * @param {number} amount - Quantidade (ml ou unidades)
-     * @param {string|null} customLabel - Nome personalizado (obrigatório p/ remédios)
-     */
     addRecord: (typeId, amount, customLabel = null) => {
         const typeConfig = ENTRY_TYPES[typeId];
+        if (!typeConfig) return false;
 
-        if (!typeConfig) {
-            console.error(`Tipo desconhecido: ${typeId}`);
-            return false;
-        }
-
-        // 1. Cálculo da Hidratação Real (Regra de Negócio)
-        // Se for remédio (factor 0), hydrationML será 0.
-        // Math.floor garante números inteiros no banco.
         const hydrationML = Math.floor(amount * typeConfig.factor);
-
-        // 2. Definição do Nome
-        // Se o usuário digitou um nome (ex: "Dipirona"), usamos ele.
-        // Se não, usamos o padrão do catálogo (ex: "Água").
         const label = customLabel || typeConfig.label;
 
-        // 3. Montagem do Objeto (Payload)
         const entryData = {
             type: typeId,
             label: label,
             amount: amount,
-            unit: typeConfig.unit, // Persistimos a unidade ('ml' ou 'un') para facilitar a UI
+            unit: typeConfig.unit,
             hydrationML: hydrationML
         };
 
-        // 4. Persistência
         Storage.addEntry(entryData);
         return true;
     },
 
-    /**
-     * Remove um registro pelo ID
-     */
     removeRecord: (id) => {
         Storage.deleteEntry(id);
     },
 
-    /**
-     * Retorna o "Estado Atual" do dia para a UI consumir.
-     * Calcula totais e progresso em tempo real baseados no histórico.
-     */
+    // Retorna estatísticas APENAS DO DIA ATUAL (Home)
     getDailyStats: () => {
         const data = Storage.getData();
         const settings = Storage.getSettings();
+        const todayStr = new Date().toLocaleDateString('pt-BR');
 
-        // Reduce: Soma apenas a coluna 'hydrationML' de todos os registros
-        const currentTotal = data.entries.reduce((total, entry) => {
-            return total + (entry.hydrationML || 0);
-        }, 0);
+        // Filtra registros que tenham a dataString de hoje OU timestamp do dia
+        const todayEntries = data.entries.filter(entry => {
+            // Compatibilidade com V2 (usava timestamp) e V3 (usa dateString)
+            if (entry.dateString) return entry.dateString === todayStr;
+            return new Date(entry.timestamp).toLocaleDateString('pt-BR') === todayStr;
+        });
 
-        // Cálculo de Porcentagem (Trava em 100% visualmente se quiser, ou deixa passar)
-        // Aqui deixamos passar de 100% para gamificação ("Superou a meta!")
+        const currentTotal = todayEntries.reduce((total, entry) => total + (entry.hydrationML || 0), 0);
         const progressPercentage = (currentTotal / settings.goal) * 100;
 
         return {
             totalML: currentTotal,
             goalML: settings.goal,
-            percentage: progressPercentage, // Número puro (ex: 50.5)
-            entries: data.entries,          // Histórico bruto para a Timeline
+            percentage: progressPercentage,
+            entries: todayEntries, // Retorna só as de hoje para a Timeline
             isGoalReached: currentTotal >= settings.goal
         };
+    },
+
+    // NOVA: Retorna dados para o Gráfico (Últimos 7 dias)
+    getWeeklyStats: () => {
+        const data = Storage.getData();
+        const settings = Storage.getSettings(); // Para saber a meta
+        const daysMap = new Map();
+
+        // 1. Gera os últimos 7 dias (incluindo hoje) com valor 0
+        for (let i = 6; i >= 0; i--) {
+            const d = new Date();
+            d.setDate(d.getDate() - i);
+            const dateKey = d.toLocaleDateString('pt-BR');
+            // Pega o dia da semana (Dom, Seg...)
+            const dayName = d.toLocaleDateString('pt-BR', { weekday: 'short' }).slice(0, 3);
+            
+            daysMap.set(dateKey, { 
+                day: dayName, 
+                total: 0, 
+                date: dateKey,
+                isToday: i === 0 
+            });
+        }
+
+        // 2. Popula com dados do histórico
+        data.entries.forEach(entry => {
+            // Determina a data do registro
+            const entryDate = entry.dateString || new Date(entry.timestamp).toLocaleDateString('pt-BR');
+            
+            if (daysMap.has(entryDate)) {
+                const current = daysMap.get(entryDate);
+                current.total += (entry.hydrationML || 0);
+            }
+        });
+
+        return Array.from(daysMap.values());
     }
 };

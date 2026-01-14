@@ -23,39 +23,69 @@
             <h1>AquaHabit</h1>
         </div>
         <div class="header-controls">
-            <button id="btn-install" class="install-btn" style="display: none;">📲 Instalar</button>
+            <button id="btn-install" class="install-btn" style="display: none;">📲</button>
             <button id="btn-theme" class="icon-btn">🌓</button>
-            <button id="btn-settings" class="icon-btn">⚙️</button> </div>
+            <button id="btn-settings" class="icon-btn">⚙️</button>
+        </div>
     </header>
 
-    <main class="app-container"> <section class="progress-section">
-            <div class="progress-container">
-                <svg class="progress-ring" width="220" height="220">
-                    <circle class="progress-ring-bg" stroke="var(--surface-variant)" stroke-width="12" fill="transparent" r="90" cx="110" cy="110"/>
-                    <circle class="progress-ring-circle" stroke="var(--primary-color)" stroke-width="12" fill="transparent" r="90" cx="110" cy="110"/>
-                </svg>
-                <div class="progress-text">
-                    <span class="label">Hoje</span>
-                    <h2 id="total-amount">0</h2>
-                    <span class="unit">ml</span>
+    <main class="app-container">
+        
+        <div id="view-home" class="view active">
+            <h2 class="section-title" style="margin-bottom: 20px; font-size: 1.2rem; color: var(--text-secondary);">Visão Geral</h2>
+
+            <section class="progress-section">
+                <div class="progress-container">
+                    <svg class="progress-ring" width="220" height="220">
+                        <circle class="progress-ring-bg" stroke="var(--surface-variant)" stroke-width="12" fill="transparent" r="90" cx="110" cy="110"/>
+                        <circle class="progress-ring-circle" stroke="var(--primary-color)" stroke-width="12" fill="transparent" r="90" cx="110" cy="110"/>
+                    </svg>
+                    <div class="progress-text">
+                        <span class="label">Hoje</span>
+                        <h2 id="total-amount">0</h2>
+                        <span class="unit">ml</span>
+                    </div>
+                </div>
+            </section>
+
+            <section class="timeline-section">
+                <div class="section-header">
+                    <h3>Histórico</h3>
+                    <span class="date-badge" id="current-date">Hoje</span>
+                </div>
+                <div id="empty-state" class="empty-state hidden">
+                    <span class="empty-icon">💧</span>
+                    <p>Comece seu dia bebendo água!</p>
+                </div>
+                <ul id="history-list" class="history-list"></ul>
+            </section>
+        </div>
+
+        <div id="view-stats" class="view hidden">
+            <h2 class="section-title" style="margin-bottom: 20px; font-size: 1.2rem; color: var(--text-secondary);">Seu Progresso</h2>
+
+            <div class="chart-container">
+                <h3>Últimos 7 Dias</h3>
+                <div id="weekly-chart" class="bar-chart"></div>
+            </div>
+
+            <div class="stats-cards">
+                <div class="stat-card">
+                    <span class="icon">🏆</span>
+                    <div class="info">
+                        <span class="label">Melhor Dia</span>
+                        <strong id="stat-best-day">--</strong>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <span class="icon">📈</span>
+                    <div class="info">
+                        <span class="label">Média Diária</span>
+                        <strong id="stat-average">0 ml</strong>
+                    </div>
                 </div>
             </div>
-        </section>
-
-        <section class="timeline-section">
-            <div class="section-header">
-                <h3>Histórico</h3>
-                <span class="date-badge" id="current-date">Hoje</span>
-            </div>
-
-            <div id="empty-state" class="empty-state hidden">
-                <span class="empty-icon">💧</span>
-                <p>Comece seu dia bebendo água!</p>
-            </div>
-
-            <ul id="history-list" class="history-list">
-                </ul>
-        </section>
+        </div>
 
     </main>
 
@@ -67,16 +97,12 @@
                 <h3>O que você bebeu?</h3>
                 <button id="modal-close" class="close-btn">&times;</button>
             </div>
-
-            <div id="drink-options-grid" class="options-grid">
-                </div>
-
+            <div id="drink-options-grid" class="options-grid"></div>
             <div class="modal-form">
                 <div id="label-container" class="input-group hidden">
                     <label>Nome do item:</label>
                     <input type="text" id="input-label" placeholder="Ex: Vitamina C">
                 </div>
-
                 <div class="input-group">
                     <label>Quantidade:</label>
                     <div class="amount-wrapper">
@@ -113,22 +139,38 @@
                     </label>
                 </div>
             </section>
+            
             <hr class="divider">
+            
             <section class="settings-section">
                 <h4>Sobre o Projeto</h4>
-                <p class="app-version">AquaHabit v2.0</p>
+                <p class="app-version">AquaHabit v3.0</p>
                 <div class="dev-info"><small>Desenvolvido por</small> <strong>Andre</strong></div>
             </section>
+            
             <section class="settings-section actions-section">
                 <button id="btn-share" class="action-card">
                     <span class="icon">📤</span> <strong>Compartilhar</strong>
+                    <small>Mostre seu progresso</small>
                 </button>
                 <button id="btn-support" class="action-card">
                     <span class="icon">☕</span> <strong>Apoiar</strong>
+                    <small>Ajude o projeto</small>
                 </button>
             </section>
         </div>
     </dialog>
+
+    <nav class="bottom-nav">
+        <button class="nav-item active" data-target="view-home">
+            <span class="nav-icon">🏠</span>
+            <span class="nav-label">Hoje</span>
+        </button>
+        <button class="nav-item" data-target="view-stats">
+            <span class="nav-icon">📊</span>
+            <span class="nav-label">Histórico</span>
+        </button>
+    </nav>
 
     <script type="module" src="./src/js/main.js"></script>
 </body>

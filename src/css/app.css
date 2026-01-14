@@ -489,6 +489,7 @@ dialog.modal input[type="number"]:focus {
     border-top: 1px solid var(--border-color);
 }
 
+/* Botões de Ação no Modal */
 .actions-section {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -501,29 +502,21 @@ dialog.modal input[type="number"]:focus {
    ========================================================= */
 
 .action-card {
-    /* Reset total de estilos nativos do navegador */
-    appearance: none;
-    -webkit-appearance: none;
-    background: transparent; /* Importante: limpa cores e imagens padrão */
-    background-color: transparent;
-    
+    background: transparent;
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 16px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    padding: 16px;
-    border: 1px solid var(--border-color);
-    color: var(--text-primary);
-    border-radius: 16px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    text-align: center;
     gap: 8px;
-    box-shadow: none;
+    cursor: pointer;
+    color: var(--text-primary);
+    transition: background 0.2s;
 }
 
 .action-card:hover {
-    background-color: rgba(0,0,0,0.03);
+    background-color: var(--bg-app);
 }
 
 .action-card:active {
@@ -576,3 +569,151 @@ dialog.modal input[type="number"]:focus {
     0% { transform: scale(0.8); opacity: 0; }
     100% { transform: scale(1); opacity: 1; }
 }
+
+/* =========================================
+   AQUAHABIT V3 - VIEWS & NAVIGATION
+   ========================================= */
+
+/* Ajuste do Container Principal para não conflitar com a Navbar */
+.app-container {
+    padding-bottom: 100px; /* Mais espaço para a navbar */
+}
+
+/* Sistema de Views (Abas) */
+.view {
+    display: none;
+    animation: fadeIn 0.3s ease-out;
+}
+.view.active {
+    display: block;
+}
+
+/* Navbar Inferior */
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 70px;
+    background-color: var(--bg-surface);
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    z-index: 90; /* Abaixo do Modal (1000) e FAB (100) */
+    padding-bottom: env(safe-area-inset-bottom); /* Suporte a iPhone X+ */
+}
+
+.nav-item {
+    background: none;
+    border: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.nav-item .nav-icon { font-size: 1.5rem; }
+.nav-item .nav-label { font-size: 0.75rem; font-weight: 600; }
+
+.nav-item.active {
+    color: var(--primary-color);
+}
+.nav-item.active .nav-icon { transform: translateY(-2px); }
+
+/* Ajuste do FAB para não ficar em cima da Navbar */
+.fab {
+    bottom: 90px; /* Sobe um pouco mais */
+}
+
+/* =========================================
+   ESTILOS DA TELA DE ESTATÍSTICAS
+   ========================================= */
+
+.chart-container {
+    background: var(--bg-surface);
+    padding: var(--space-md);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow);
+    margin-bottom: var(--space-md);
+}
+
+/* Gráfico de Barras CSS Puro */
+.bar-chart {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    height: 200px;
+    margin-top: 20px;
+    padding-top: 20px; /* Espaço para valores no topo se quiser */
+}
+
+.chart-column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    justify-content: flex-end;
+    gap: 8px;
+    position: relative;
+}
+
+.bar-track {
+    width: 12px;
+    height: 100%;
+    background: var(--bg-app);
+    border-radius: 10px;
+    position: relative;
+    overflow: hidden;
+}
+
+.bar-fill {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: var(--primary-color);
+    border-radius: 10px;
+    transition: height 1s ease-out;
+    min-height: 4px; /* Para sempre mostrar algo */
+}
+
+/* Se atingiu a meta, muda a cor */
+.bar-fill.success {
+    background: #10b981; /* Verde */
+}
+
+.day-label {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    font-weight: 600;
+}
+
+/* Cards de Resumo */
+.stats-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-md);
+}
+
+.stat-card {
+    background: var(--bg-surface);
+    padding: var(--space-md);
+    border-radius: var(--radius-lg);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: var(--shadow);
+}
+
+.stat-card .icon { font-size: 1.8rem; }
+.stat-card .info { display: flex; flex-direction: column; }
+.stat-card .label { font-size: 0.75rem; color: var(--text-secondary); }
+.stat-card strong { font-size: 1.2rem; color: var(--text-primary); }
