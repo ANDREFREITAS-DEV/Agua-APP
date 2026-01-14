@@ -1,0 +1,24 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-main);
+    background-color: var(--bg-app);
+    color: var(--text-primary);
+    line-height: 1.5;
+    transition: background-color 0.3s, color 0.3s;
+    -webkit-tap-highlight-color: transparent;
+}
+
+button {
+    font-family: inherit;
+    border: none;
+    cursor: pointer;
+}
+
+ul {
+    list-style: none;
+}

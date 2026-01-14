@@ -1,0 +1,29 @@
+/* Light Theme (Padrão) */
+:root[data-theme="light"] {
+    --bg-app: #F3F4F6;
+    --bg-surface: #FFFFFF;
+    --text-primary: #1F2937;
+    --text-secondary: #6B7280;
+    
+    --primary-color: hsl(var(--hue-primary), 90%, 60%);
+    --primary-hover: hsl(var(--hue-primary), 90%, 50%);
+    --primary-light: hsl(var(--hue-primary), 90%, 95%);
+    
+    --border-color: #E5E7EB;
+    --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+/* Dark Theme */
+:root[data-theme="dark"] {
+    --bg-app: #111827;
+    --bg-surface: #1F2937;
+    --text-primary: #F9FAFB;
+    --text-secondary: #9CA3AF;
+    
+    --primary-color: hsl(var(--hue-primary), 80%, 60%);
+    --primary-hover: hsl(var(--hue-primary), 80%, 50%);
+    --primary-light: hsl(var(--hue-primary), 30%, 20%);
+    
+    --border-color: #374151;
+    --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+}

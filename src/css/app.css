@@ -1,0 +1,415 @@
+.container {
+    max-width: 480px;
+    margin: 0 auto;
+    padding: var(--space-md);
+    padding-bottom: 80px;
+}
+
+/* Header */
+.app-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--space-md);
+    max-width: 480px;
+    margin: 0 auto;
+}
+
+/* Logo no Header */
+.logo-area {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+/* Classe nova para a imagem */
+.logo-img {
+    /* Mudei de 32px para 42px para ficar maior como você pediu */
+    height: 42px; 
+    width: 42px;
+    object-fit: contain;
+    
+    /* Removi o filter drop-shadow e o border-radius pois não precisa mais */
+}
+
+.icon-btn {
+    background: transparent;
+    font-size: 1.5rem;
+    padding: var(--space-xs);
+    border-radius: var(--radius-full);
+}
+
+/* Progress Card */
+.progress-card {
+    background-color: var(--bg-surface);
+    padding: var(--space-xl);
+    border-radius: var(--radius-lg);
+    text-align: center;
+    box-shadow: var(--shadow);
+    margin-bottom: var(--space-lg);
+}
+
+.progress-info {
+    font-size: var(--text-display);
+    font-weight: 800;
+    color: var(--text-primary);
+    line-height: 1;
+}
+
+.unit {
+    font-size: var(--text-lg);
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.progress-meta {
+    color: var(--text-secondary);
+    margin: var(--space-xs) 0 var(--space-lg);
+}
+
+.progress-bar-container {
+    height: 12px;
+    background-color: var(--primary-light);
+    border-radius: var(--radius-full);
+    overflow: hidden;
+    margin-bottom: var(--space-xs);
+}
+
+.progress-fill {
+    height: 100%;
+    background-color: var(--primary-color);
+    transition: width 0.5s var(--ease-out);
+}
+
+.percentage-text {
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+/* Actions */
+.actions-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: var(--space-md);
+    margin-bottom: var(--space-lg);
+}
+
+.add-btn {
+    background-color: var(--bg-surface);
+    padding: var(--space-md) var(--space-xs);
+    border-radius: var(--radius-md);
+    border: 2px solid var(--border-color);
+    color: var(--primary-color);
+    font-weight: 700;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: all 0.2s;
+    box-shadow: var(--shadow);
+}
+
+.add-btn small {
+    font-weight: 400;
+    color: var(--text-secondary);
+    font-size: 0.75rem;
+    margin-top: 4px;
+}
+
+.add-btn:active {
+    transform: scale(0.95);
+    background-color: var(--primary-light);
+    border-color: var(--primary-color);
+}
+
+/* History */
+.history-section h2 {
+    font-size: var(--text-lg);
+    margin-bottom: var(--space-md);
+}
+
+.history-list {
+    background-color: var(--bg-surface);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+}
+
+.history-item {
+    display: flex;
+    justify-content: space-between;
+    padding: var(--space-md);
+    border-bottom: 1px solid var(--border-color);
+    font-size: var(--text-sm);
+}
+
+.history-item:last-child {
+    border-bottom: none;
+}
+
+.history-date {
+    color: var(--text-secondary);
+}
+
+.history-val {
+    font-weight: 700;
+}
+
+/* Buttons & Modal */
+.settings-trigger {
+    margin-top: var(--space-xl);
+    text-align: center;
+}
+
+.outline-btn {
+    background: transparent;
+    border: 2px solid var(--border-color);
+    padding: var(--space-sm) var(--space-lg);
+    border-radius: var(--radius-full);
+    color: var(--text-secondary);
+    font-weight: 600;
+}
+
+.modal {
+    margin: auto;
+    border: none;
+    border-radius: var(--radius-md);
+    background-color: var(--bg-surface);
+    color: var(--text-primary);
+    box-shadow: var(--shadow);
+    padding: 0;
+}
+
+.modal::backdrop {
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+    padding: var(--space-lg);
+    width: 80vw;
+    max-width: 400px;
+}
+
+.modal input {
+    width: 100%;
+    padding: var(--space-sm);
+    margin: var(--space-sm) 0 var(--space-lg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    font-size: var(--text-base);
+    background-color: var(--bg-app);
+    color: var(--text-primary);
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--space-md);
+}
+
+.primary-btn {
+    background-color: var(--primary-color);
+    color: white;
+    padding: var(--space-sm) var(--space-lg);
+    border-radius: var(--radius-sm);
+}
+
+.text-btn {
+    background: transparent;
+    color: var(--text-secondary);
+}
+
+/* Header Controls (Agrupando botões do topo) */
+.header-controls {
+    display: flex;
+    gap: var(--space-xs);
+}
+
+/* Modal Renovado */
+.modal {
+    width: 90vw;
+    max-width: 400px;
+    border-radius: var(--radius-lg);
+    background-color: var(--bg-surface);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--space-md);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.modal-content {
+    padding: var(--space-md);
+    max-height: 70vh;
+    overflow-y: auto; /* Permite rolar se a tela for pequena */
+}
+
+.settings-section {
+    margin-bottom: var(--space-lg);
+}
+
+.settings-section h4 {
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: var(--space-md);
+}
+
+.divider {
+    border: 0;
+    height: 1px;
+    background: var(--border-color);
+    margin: var(--space-md) 0;
+}
+
+/* Input Group & Toggle */
+.input-group {
+    margin-bottom: var(--space-md);
+}
+
+.input-row {
+    display: flex;
+    gap: var(--space-sm);
+    margin-top: var(--space-xs);
+}
+
+.input-row input {
+    flex: 1;
+    padding: var(--space-sm);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    background: var(--bg-app);
+    color: var(--text-primary);
+}
+
+.primary-btn.sm {
+    padding: 0 var(--space-md);
+    font-size: var(--text-sm);
+}
+
+.row-between {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Toggle Switch (Obrigatório para UI moderna) */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 48px;
+    height: 24px;
+}
+
+.switch input { 
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: var(--text-secondary); /* Cor desligado */
+    transition: .4s;
+}
+
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .4s;
+}
+
+input:checked + .slider {
+    background-color: var(--primary-color);
+}
+
+input:checked + .slider:before {
+    transform: translateX(24px);
+}
+
+/* Action Cards (Compartilhar/Apoiar) */
+.actions-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-sm);
+}
+
+.action-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: var(--space-md);
+    background: var(--bg-app);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    gap: var(--space-xs);
+}
+
+.action-card:active {
+    background: var(--border-color);
+}
+
+.app-desc {
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+    margin-bottom: var(--space-sm);
+}
+
+.footer-note {
+    text-align: center;
+    margin-top: var(--space-lg);
+    color: var(--text-secondary);
+    opacity: 0.5;
+}
+/* Botão de Instalação (PWA) */
+.install-btn {
+    background-color: var(--primary-color);
+    color: white;
+    border-radius: var(--radius-full); /* Formato cápsula */
+    padding: 0.4rem 1rem;
+    font-size: 0.85rem;
+    font-weight: 700;
+    margin-right: var(--space-xs);
+    
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    
+    box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3); /* Sombra azulada */
+    transition: transform 0.2s, box-shadow 0.2s;
+    animation: fadeIn 0.5s ease-out;
+}
+
+.install-btn:active {
+    transform: scale(0.95);
+    box-shadow: none;
+}
+
+/* Animação suave quando ele aparecer */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
